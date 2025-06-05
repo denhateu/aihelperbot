@@ -5,6 +5,7 @@ from aiogram.fsm.state import State, StatesGroup
 
 from dispatcher import dp
 from db import Database
+from config_parser import config
 
 
 class Form(StatesGroup):
@@ -27,7 +28,7 @@ async def task_name_handler(message: Message, state: FSMContext) -> None:
     task_name = message.text
 
     # Adding task to db
-    db = Database("database.db")
+    db = Database(config["database"]["name"])
     db.add_data("tasks", "name", task_name)
     db.close()
 

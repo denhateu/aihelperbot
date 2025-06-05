@@ -4,6 +4,7 @@ from aiogram.types import Message
 from dispatcher import dp
 from texts import about_text
 from db import Database
+from config_parser import config
 
 
 @dp.message(CommandStart())
@@ -13,7 +14,7 @@ async def start_command_handler(message: Message) -> None:
     """
 
     # Initialize database connection
-    db = Database("database.db")
+    db = Database(config["database"]["name"])
 
     # Creates tables if not exists
     db.execute_query(f"""
