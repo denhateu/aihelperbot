@@ -19,7 +19,6 @@ async def start_command_handler(message: Message) -> None:
     db.execute_query(f"""
 CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
     name TEXT NOT NULL
 )
 """)
