@@ -13,6 +13,10 @@ import handlers
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 
+# Checks if cannot get token from environment
+if not TOKEN:
+    exit("Error: cannot get token from environment!")
+
 bot = Bot(token=TOKEN)
 
 
