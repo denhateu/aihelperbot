@@ -24,6 +24,13 @@ VALUES (?)
         # Saves changes
         self.connection.commit()
 
+    def get_all_data(self, table_name: str) -> list:
+        # Executing query
+        self.cursor.execute(f"SELECT * FROM {table_name}")
+
+        # Returns got rows from db
+        return self.cursor.fetchall()
+
     def close(self) -> None:
         # Closing database connection
         self.connection.close()
