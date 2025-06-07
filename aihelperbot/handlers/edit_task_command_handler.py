@@ -4,25 +4,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from dispatcher import dp
-from db import Database
-from config_parser import config
+from task import Task
 
 
 class Form(StatesGroup):
     task_id = State()
-
-
-async def show_tasks(message: Message):
-    db = Database(config["database"]["name"])
-    tasks = db.get_all_data("tasks")
-    db.close()
-
-    tasks_string = ""
-
-    for task in tasks:
-        tasks_string += f"{task[0]}. {task[1]}\n"
-
-    await message.answer(tasks_string)
+    new_task_name = State()
 
 
 @dp.message(Command("edit_task"))
@@ -33,7 +20,13 @@ async def help_command_handler(message: Message, state: FSMContext) -> None:
 
     await state.clear()
 
-    await show_tasks(message)
+    tasks = Task().get_all_tasks()
+
+    result_string = ""
+    for task in tasks:
+        result_string += f"{task[0]}. {task[1]}\n"
+
+    await message.answer(result_string)
 
     await message.answer("Выбери номер задачи")
     await state.set_state(Form.task_id)
@@ -42,14 +35,24 @@ async def help_command_handler(message: Message, state: FSMContext) -> None:
 @dp.message(Form.task_id)
 async def task_id_handler(message: Message, state: FSMContext) -> None:
     task_id = message.text
+    if task_id:
+        # Saves task id in FSM memory
+        await state.update_data(id=task_id)
 
-    if task_id != None:
-        db = Database(config["database"]["name"])
-        task_exists = db.check_if_data_exists("tasks", task_id)
-        db.close()
+        await message.answer("Введи новое название задачи")
 
-        if task_exists:
-            await message.answer("Изменено!")
-            await state.clear()
-        else:
-            await message.answer("Такого номера задачи не существует!")
+        await state.set_state(Form.new_task_name)
+
+
+@dp.message(Form.new_task_name)
+async def new_task_name_handler(message: Message, state: FSMContext) -> None:
+    new_task_name = message.text
+    if new_task_name:
+        # Gets data from FSM memory
+        data = await state.get_data()
+        task_id = data.get("id")
+
+        Task().edit_task(str(task_id), new_task_name)
+
+        await message.answer("Изменено!")
+        await state.clear()
