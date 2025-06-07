@@ -43,5 +43,13 @@ async def help_command_handler(message: Message, state: FSMContext) -> None:
 async def task_id_handler(message: Message, state: FSMContext) -> None:
     task_id = message.text
 
-    await message.answer(f"Изменено!")
-    await state.clear()
+    if task_id != None:
+        db = Database(config["database"]["name"])
+        task_exists = db.check_if_data_exists("tasks", task_id)
+        db.close()
+
+        if task_exists:
+            await message.answer("Изменено!")
+            await state.clear()
+        else:
+            await message.answer("Такого номера задачи не существует!")

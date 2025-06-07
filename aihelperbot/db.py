@@ -31,6 +31,16 @@ VALUES (?)
         # Returns got rows from db
         return self.cursor.fetchall()
 
+    def check_if_data_exists(self, table_name: str, element_id: str) -> bool:
+        # Executing query with element ID
+        self.cursor.execute(f"SELECT * FROM {table_name} WHERE id = ?", (element_id,))
+
+        result = self.cursor.fetchone()
+        if result:
+            return True
+        else:
+            return False
+
     def close(self) -> None:
         # Closing database connection
         self.connection.close()
