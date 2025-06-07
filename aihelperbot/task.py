@@ -40,6 +40,17 @@ WHERE id = ?
 
         db.close()
 
+    def delete_task(self, task_id: str) -> None:
+        # Initialize database connection
+        db = Database(config["database"]["name"])
+
+        db.execute_query(f"""
+DELETE FROM tasks
+WHERE id = ?
+""", (task_id,))
+
+        db.close()
+
     def get_all_tasks(self) -> list:
         # Initialize database connection
         db = Database(config["database"]["name"])
