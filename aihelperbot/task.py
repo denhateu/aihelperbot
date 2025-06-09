@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     def task_name_exists(self, task_name: str) -> bool:
         # Initialize database connection
         db = Database(config["database"]["name"])
-        task = db.execute_query(f"SELECT * FROM tasks WHERE name = ?", (task_name,))
+        task = db.fetch_one(f"SELECT * FROM tasks WHERE name = ?", (task_name,))
         db.close()
 
         if len(task) >= 1:
@@ -65,7 +65,7 @@ WHERE id = ?
     def get_all_tasks(self) -> list:
         # Initialize database connection
         db = Database(config["database"]["name"])
-        tasks = db.execute_query("SELECT * FROM tasks")
+        tasks = db.fetch_all("SELECT * FROM tasks")
         db.close()
 
         return tasks
