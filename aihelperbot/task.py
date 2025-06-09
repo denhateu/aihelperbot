@@ -17,16 +17,27 @@ CREATE TABLE IF NOT EXISTS tasks (
 
         db.close()
 
+    def task_id_exists(self, task_id: str) -> bool:
+        # Initialize database connection
+        db = Database(config["database"]["name"])
+        task = db.fetch_one(f"SELECT * FROM tasks WHERE id = ?", (task_id,))
+        db.close()
+
+        if task == None:
+            return False
+        else:
+            return True
+
     def task_name_exists(self, task_name: str) -> bool:
         # Initialize database connection
         db = Database(config["database"]["name"])
         task = db.fetch_one(f"SELECT * FROM tasks WHERE name = ?", (task_name,))
         db.close()
 
-        if len(task) >= 1:
-            return True
-        else:
+        if task == None:
             return False
+        else:
+            return True
 
     def create_task(self, task_name: str) -> None:
         # Initialize database connection

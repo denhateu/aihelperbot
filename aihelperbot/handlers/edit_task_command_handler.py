@@ -39,9 +39,11 @@ async def task_id_handler(message: Message, state: FSMContext) -> None:
         # Saves task id in FSM memory
         await state.update_data(id=task_id)
 
-        await message.answer("Введи новое название задачи")
-
-        await state.set_state(Form.new_task_name)
+        if Task().task_id_exists(task_id):
+            await message.answer("Введи новое название задачи")
+            await state.set_state(Form.new_task_name)
+        else:
+            await message.answer("Такой задачи не существует")
 
 
 @dp.message(Form.new_task_name)
