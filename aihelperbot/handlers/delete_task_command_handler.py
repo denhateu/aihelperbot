@@ -35,8 +35,13 @@ async def delete_task_command_handler(message: Message, state: FSMContext) -> No
 async def delete_task_id_handler(message: Message, state: FSMContext) -> None:
     delete_task_id = message.text
     if delete_task_id:
-        # Removing task from db
-        Task().delete_task(delete_task_id)
+        task = Task()
 
-        await message.answer("Задача удалена!")
-        await state.clear()
+        # Removing task from db
+        if task.task_id_exists(delete_task_id):
+            task.delete_task(delete_task_id)
+
+            await message.answer("Задача удалена!")
+            await state.clear()
+        else:
+            await message.answer("Такой задачи не существует")
