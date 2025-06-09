@@ -28,9 +28,14 @@ async def task_name_handler(message: Message, state: FSMContext) -> None:
 
     # Adding task to db
     if task_name:
-        Task().create_task(task_name)
+        task = Task()
 
-        await message.answer("Добавлено!")
-        await state.clear()
+        if task.task_name_exists(task_name) is False:
+            task.create_task(task_name)
+
+            await message.answer("Добавлено!")
+            await state.clear()
+        else:
+            await message.answer("Такая задача уже есть")
     else:
         await message.answer("Не удалось добавить задачу")
