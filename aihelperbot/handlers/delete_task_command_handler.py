@@ -19,13 +19,7 @@ async def delete_task_command_handler(message: Message, state: FSMContext) -> No
 
     await state.clear()
 
-    tasks = Task().get_all_tasks()
-
-    result_string = ""
-    for task in tasks:
-        result_string += f"{task[0]}. {task[1]}\n"
-
-    await message.answer(result_string)
+    await Task().show_tasks(message)
 
     await message.answer("Выбери номер задачи")
     await state.set_state(Form.delete_task_id)

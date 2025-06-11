@@ -1,3 +1,5 @@
+from aiogram.types import Message
+
 from db import Database
 from config_parser import config
 
@@ -147,3 +149,16 @@ WHERE id = ?
         db.close()
 
         return tasks
+
+    async def show_tasks(self, message: Message) -> None:
+        tasks = self.get_all_tasks()
+
+        result_string = "Список задач:\n"
+        i = 1
+        for task in tasks:
+            task_name = task[1]
+            result_string += f"{i}. {task_name}\n"
+
+            i += 1
+
+        await message.answer(result_string)
