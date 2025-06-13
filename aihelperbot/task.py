@@ -154,11 +154,10 @@ WHERE id = ?
         tasks = self.get_all_tasks()
 
         result_string = "Список задач:\n"
-        i = 1
         for task in tasks:
+            task_id = task[0]
             task_name = task[1]
-            result_string += f"{i}. {task_name}\n"
 
-            i += 1
+            result_string += f"{task_id}. {task_name}\n"
 
         await message.answer(result_string)
