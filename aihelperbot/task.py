@@ -20,7 +20,7 @@ class Task:
         db = Database(config["database"]["name"])
 
         # Creates tasks table if not exists
-        db.execute_query(f"""
+        db.execute_query("""
 CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
@@ -44,10 +44,10 @@ CREATE TABLE IF NOT EXISTS tasks (
 
         # Initialize database connection
         db = Database(config["database"]["name"])
-        task = db.fetch_one(f"SELECT * FROM tasks WHERE id = ?", (task_id,))
+        task = db.fetch_one("SELECT * FROM tasks WHERE id = ?", (task_id,))
         db.close()
 
-        if task == None:
+        if task is None:
             return False
         else:
             return True
@@ -67,10 +67,10 @@ CREATE TABLE IF NOT EXISTS tasks (
 
         # Initialize database connection
         db = Database(config["database"]["name"])
-        task = db.fetch_one(f"SELECT * FROM tasks WHERE name = ?", (task_name,))
+        task = db.fetch_one("SELECT * FROM tasks WHERE name = ?", (task_name,))
         db.close()
 
-        if task == None:
+        if task is None:
             return False
         else:
             return True
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS tasks (
         # Initialize database connection
         db = Database(config["database"]["name"])
 
-        db.execute_query(f"""
+        db.execute_query("""
 INSERT INTO tasks (name)
 VALUES (?)
 """, (task_name,))
@@ -108,7 +108,7 @@ VALUES (?)
         # Initialize database connection
         db = Database(config["database"]["name"])
 
-        db.execute_query(f"""
+        db.execute_query("""
 UPDATE tasks
 SET name = ?
 WHERE id = ?
@@ -128,7 +128,7 @@ WHERE id = ?
         # Initialize database connection
         db = Database(config["database"]["name"])
 
-        db.execute_query(f"""
+        db.execute_query("""
 DELETE FROM tasks
 WHERE id = ?
 """, (task_id,))
