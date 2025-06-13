@@ -8,5 +8,6 @@ dependencies = [
     "aiogram>=3.20.0.post0",
     "asyncio>=3.4.3",
     "dotenv>=0.9.9",
+    "ruff>=0.11.13",
     "toml>=0.10.2",
 ]
